@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prior Authorization Agent — Demo (synthetic data)</title>
+<meta name="description" content="Clickable demo of an AI prior-authorization agent for an outpatient imaging center. Synthetic data only.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Cpath d='M9 17l5 5 9-11' stroke='%23fff' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="banner" role="status">Demo with synthetic data. No real patients, providers or payers. <span id="sandbox-pill" class="pill pill-muted">Checking payer sandbox…</span></div>
+
+<header class="top">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">✓</div>
+    <div>
+      <div class="title">Prior Authorization Agent</div>
+      <div class="subtitle">Outpatient imaging · El Paso demo center</div>
+    </div>
+  </div>
+  <div class="clock" title="The demo runs on a simulated clock so a 7-day wait fits into 3 minutes.">
+    <span class="clock-label">Demo clock</span>
+    <strong id="clock-now">—</strong>
+    <div class="clock-btns">
+      <button class="btn btn-sm" data-advance="6">+6 h</button>
+      <button class="btn btn-sm" data-advance="24">+1 day</button>
+      <button class="btn btn-sm" data-advance="72">+3 days</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="steps" aria-label="Demo steps" id="steps"></nav>
+  <main class="pane" id="pane"></main>
+</div>
+
+<footer class="foot">
+  <span>RGF Ventures · Elovar Technology Solutions · demo build</span>
+  <a href="https://github.com/rfinlay/imaging-priorauth-demo#readme" target="_blank" rel="noopener">What is real vs simulated</a>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

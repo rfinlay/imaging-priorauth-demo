@@ -351,7 +351,8 @@ function viewQueue() {
         const ratio = Math.min(1, used / total);
         const cls = ratio >= 1 ? 'bad' : ratio >= 0.75 ? 'warn' : '';
         const left = Math.max(0, total - used);
-        const clock = live ? `<div class="meter ${cls}"><span style="width:${Math.round(ratio * 100)}%"></span></div><span class="small">${left >= 48 ? `${Math.floor(left / 24)} days` : `${Math.round(left)} h`} left of ${total >= 72 && total % 24 === 0 ? `${total / 24} days` : `${total} h`}</span>`
+        const useDays = total > 72;
+        const clock = live ? `<div class="meter ${cls}"><span style="width:${Math.round(ratio * 100)}%"></span></div><span class="small">${useDays && left >= 48 ? `${Math.floor(left / 24)} days` : `${Math.round(left)} h`} left of ${useDays ? `${total / 24} days` : `${total} h`}</span>`
           : c.decidedAt ? `<span class="small">Decided in ${hoursBetween(c.submit.at, c.decidedAt) >= 48 ? `${Math.round(hoursBetween(c.submit.at, c.decidedAt) / 24)} days` : `${Math.round(hoursBetween(c.submit.at, c.decidedAt))} h`}</span>` : '<span class="small">—</span>';
         return `<tr class="clickable" data-open="${c.id}"><td><strong>${esc(c.patient.name)}</strong><br><span class="small">${esc(c.cptText)}${c.urgency === 'expedited' ? ' · EXPEDITED' : ''}</span></td>
           <td>${esc(c.rule.payer)}<br><span class="small">${c.submit ? (c.submit.mode === 'live' ? 'via FHIR sandbox' : 'simulated payer') : ''}</span></td>

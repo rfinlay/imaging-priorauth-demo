@@ -326,7 +326,9 @@ function viewSubmit(c) {
       <dt>Status</dt><dd>${esc(s.disposition)} (${esc(s.outcome)})</dd>
       <dt>Endpoint</dt><dd>${s.mode === 'live' ? `<a href="${PAS_BASE}/metadata" target="_blank" rel="noopener">${PAS_BASE}</a>` : 'Simulated payer (sandbox unavailable)'}</dd>
       ${c.poll?.url ? `<dt>Read back</dt><dd><a href="${esc(c.poll.url)}" target="_blank" rel="noopener">Open the stored response on the payer sandbox</a></dd>` : ''}</dl>
-    <p class="note sim" style="margin-top:12px">What is real here: the request bundle below was really sent to the HL7 Da Vinci prior-authorization sandbox and really stored there under that tracking number. What is simulated: the sandbox has no medical-necessity rules for imaging, so it leaves every imaging request "Pending". The approve/deny you will see on the queue comes from a simulated payer and is labeled 🟠.</p>
+    <p class="note sim" style="margin-top:12px">${s.mode === 'live'
+      ? 'What is real here: the request bundle below was really sent to the HL7 Da Vinci prior-authorization sandbox and really stored there under that tracking number. What is simulated: the sandbox has no medical-necessity rules for imaging, so it leaves every imaging request "Pending". The approve/deny you will see on the queue comes from a simulated payer and is labeled 🟠.'
+      : 'The public payer sandbox was unreachable or rejected the request, so nothing was sent outside this browser. The request bundle below is what would have been sent; the tracking number, status and the approve/deny on the queue all come from a simulated payer and are labeled 🟠.'}</p>
     <details><summary>Show the FHIR request we sent (${(JSON.stringify(s.bundle).length / 1024).toFixed(1)} KB)</summary><div class="json">${esc(JSON.stringify(s.bundle, null, 2))}</div></details>
     ${s.raw ? `<details><summary>Show the payer's FHIR ClaimResponse</summary><div class="json">${esc(JSON.stringify(s.raw, null, 2))}</div></details>` : ''}` : ''}
     <div class="actions"><button class="btn btn-primary" data-step="5">Next: track the clock →</button></div>

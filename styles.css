@@ -127,5 +127,6 @@ textarea.letter { width: 100%; min-height: 320px; resize: vertical; }
 }
 @media (max-width: 480px) {
   .grid2, .tiles { grid-template-columns: 1fr; }
-  .clock { width: 100%; justify-content: space-between; }
+  .clock { width: 100%; justify-content: space-between; font-size: 13px; }
+  .clock strong { white-space: nowrap; }
 }

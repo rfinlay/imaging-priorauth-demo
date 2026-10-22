@@ -183,7 +183,6 @@ async function doSubmit(c) {
   }
   c.stage = 'pending';
   log(c, `Decision clock started: ${deadline(c)} hours (${c.urgency === 'expedited' ? 'expedited' : 'standard'}). The agent will poll and escalate at 75% of the window.`);
-  state.step = 5;
   render();
 }
 
@@ -341,7 +340,7 @@ function viewQueue() {
     <h2>Authorization queue</h2>
     <p class="lead">Every open request against its regulatory clock: 7 calendar days for standard, 72 hours for expedited (the CMS-0057-F rule payers must meet from 2026). Use the demo clock at the top to move time forward. Decisions marked 🟠 are simulated.</p>
     ${alerts.length ? `<p class="note sim">⚠ ${alerts.length} request(s) past 75% of the clock. The agent has escalated to the payer and alerted the coordinator.</p>` : ''}
-    ${rows.length ? `<table class="q"><thead><tr><th>Patient / study</th><th>Payer</th><th>Submitted</th><th>Clock</th><th>Status</th></tr></thead><tbody>
+    ${rows.length ? `<div class="tablewrap"><table class="q"><thead><tr><th>Patient / study</th><th>Payer</th><th>Submitted</th><th>Clock</th><th>Status</th></tr></thead><tbody>
       ${rows.map((c) => {
         const live = c.stage === 'pending' || c.stage === 'appeal-pending';
         const start = c.stage === 'appeal-pending' ? c.appealSubmittedAt : c.submit?.at;
@@ -356,7 +355,7 @@ function viewQueue() {
           <td>${esc(c.rule.payer)}<br><span class="small">${c.submit ? (c.submit.mode === 'live' ? 'via FHIR sandbox' : 'simulated payer') : ''}</span></td>
           <td class="small">${c.submit ? fmtDT(c.submit.at) : '—'}</td><td>${clock}</td>
           <td>${stagePill(c)}${c.stage === 'appeal-draft' ? `<br><button class="btn btn-sm btn-human" data-appeal="${c.id}" style="margin-top:6px">Review appeal</button>` : ''}${c.stage === 'approved' || c.stage === 'overturned' ? `<br><span class="small">Auth # ${c.stage === 'approved' ? c.payerDecision.authNumber : c.appealDecision.authNumber}</span>` : ''}</td></tr>`;
-      }).join('')}</tbody></table>` : '<p>No requests yet. Pick an order in step 1.</p>'}
+      }).join('')}</tbody></table></div>` : '<p>No requests yet. Pick an order in step 1.</p>'}
     <div class="actions">
       <button class="btn" data-advance="24">Advance the clock 1 day</button>
       <button class="btn" data-advance="72">Advance 3 days</button>

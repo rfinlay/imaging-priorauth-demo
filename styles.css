@@ -86,6 +86,7 @@ details summary { cursor: pointer; color: var(--brand); font-weight: 600; font-s
 .spinner { width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--brand); border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: -3px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.tablewrap { overflow-x: auto; max-width: 100%; }
 table.q { width: 100%; border-collapse: collapse; font-size: 14px; }
 table.q th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; padding: 8px 10px; border-bottom: 1px solid var(--line); }
 table.q td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
@@ -120,8 +121,9 @@ textarea.letter { width: 100%; min-height: 320px; resize: vertical; }
   .kv { grid-template-columns: 110px 1fr; }
   .top { padding: 10px 12px; }
   .card { padding: 14px; }
-  table.q th:nth-child(3), table.q td:nth-child(3) { display: none; }
-  .meter { min-width: 70px; }
+  table.q th:nth-child(2), table.q td:nth-child(2), table.q th:nth-child(3), table.q td:nth-child(3) { display: none; }
+  table.q td, table.q th { padding: 8px 6px; }
+  .meter { min-width: 60px; }
 }
 @media (max-width: 480px) {
   .grid2, .tiles { grid-template-columns: 1fr; }

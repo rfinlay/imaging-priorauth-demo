@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo Script: Prior Authorization Agent</title><style>
+:root{--ink:#1c1b18;--soft:#4a4740;--faint:#8a867c;--rule:#d9d4c7;--accent:#7a1f2b;--accent-soft:#f1e4e5;
+--serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);color:var(--ink);background:#e9e6df;font-size:10.2pt;line-height:1.42}
+.page{max-width:8.5in;margin:0.3in auto;background:#fff;padding:0.5in 0.6in}
+header{border-bottom:2px solid var(--ink);padding-bottom:8pt;margin-bottom:10pt}
+.kicker{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:4pt}
+h1{font-family:var(--serif);font-weight:400;font-size:24pt;line-height:1.1}
+.url{margin-top:8pt;font-size:11pt} .url a{color:var(--accent);font-weight:600;text-decoration:none}
+.meta{font-size:9pt;color:var(--soft);margin-top:3pt}
+h2{font-family:var(--serif);font-weight:400;font-size:14pt;margin:13pt 0 4pt;color:var(--accent);break-after:avoid}
+p{margin-bottom:6pt} strong{font-weight:600}
+blockquote{font-family:var(--serif);font-size:11pt;border-left:3px solid var(--accent);background:var(--accent-soft);padding:5pt 10pt;margin:5pt 0 7pt;break-inside:avoid}
+blockquote p{margin:0}
+ul{margin:4pt 0 8pt 16pt} li{margin-bottom:4pt}
+code{font-size:9pt}
+.box{border:1.5px solid var(--ink);padding:8pt 10pt;margin:10pt 0 4pt;break-inside:avoid}
+.box h3{font-family:var(--serif);font-weight:400;font-size:12.5pt;margin-bottom:4pt}
+table{width:100%;border-collapse:collapse;font-size:8.8pt;line-height:1.3}
+th{text-align:left;font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border-bottom:1.5px solid var(--ink);padding:0 6pt 3pt 0}
+td{border-bottom:1px solid var(--rule);padding:3pt 6pt 3pt 0;vertical-align:top}
+td.r{font-weight:700;white-space:nowrap} .real{color:#1d6b3a} .sim{color:#b5651d}
+footer{border-top:1px solid var(--rule);margin-top:12pt;padding-top:5pt;font-size:8.5pt;color:var(--soft);display:flex;justify-content:space-between}
+@media print{@page{size:letter;margin:0.45in 0.55in} body{background:#fff} .page{margin:0;padding:0;max-width:none} .pb{break-before:page} h2{break-after:avoid}}
+</style></head><body><div class="page">
+<header><div class="kicker">Rehearsal card, for Rick. About three minutes.</div>
+<h1>Demo script: the prior authorization agent</h1>
+<div class="url">Live demo: <a href="https://rfinlay.github.io/imaging-priorauth-demo/">https://rfinlay.github.io/imaging-priorauth-demo/</a></div>
+<div class="meta">Works on laptop, iPad, phone. No login. Open it before dinner and leave the tab up. Source and full notes: github.com/rfinlay/imaging-priorauth-demo</div></header>
+<div class="box"><h3>What is real and what is simulated</h3><table>
+<thead><tr><th>Piece</th><th>Status</th><th>What to say if asked</th></tr></thead><tbody>
+<tr><td>Payer submission</td><td class="r real">REAL</td><td>A Da Vinci PAS FHIR bundle is POSTed to HL7's public prior-auth reference server, which validates and stores it and returns a real tracking number.</td></tr>
+<tr><td>Reading it back</td><td class="r real">REAL</td><td>A GET against the same server returns the stored record; the link opens it.</td></tr>
+<tr><td>Request format</td><td class="r real">REAL</td><td>The national PAS standard CMS requires of Medicare Advantage, Medicaid, CHIP and exchange plans by 2027-01-01.</td></tr>
+<tr><td>7-day / 72-hour clocks</td><td class="r real">REAL logic</td><td>CMS deadlines computed from submission; the demo clock fast-forwards time.</td></tr>
+<tr><td>Incoming RIS order</td><td class="r sim">SIMULATED</td><td>A synthetic HL7 v2 ORM message. No live RIS is connected.</td></tr>
+<tr><td>Approve / deny decision</td><td class="r sim">SIMULATED</td><td>The test server has no imaging rules, so decisions come from a scripted payer, labeled orange.</td></tr>
+<tr><td>Appeal letter</td><td class="r sim">TEMPLATED</td><td>Drafted from the denial and the notes; a physician edits and signs. In production, a model drafts it under a BAA.</td></tr>
+<tr><td>Monday report</td><td class="r sim">SYNTHETIC</td><td>Placeholder numbers. Theirs come from their own volume.</td></tr>
+</tbody></table><p style="margin:5pt 0 0;font-size:9pt">Two purple <strong>Human approves</strong> gates: approving the packet before it goes out, and signing the appeal. All patient data is synthetic.</p></div>
+<p>Before you start, glance at the top banner. It should read <strong>"Payer sandbox: LIVE (HL7 Da Vinci PAS)"</strong> in green.
+If it is orange ("sandbox offline"), the demo still runs end to end; the submission just goes to the simulated payer and says so. Either way, say the line in step 4 that matches.</p>
+<h2>Framing (10 seconds)</h2>
+<blockquote>
+<p>"This is a working prototype, not slides. Everything you see is synthetic data, but the submission in the middle goes to a real payer test server that implements the national prior-auth standard. I want you to click it, not watch me."</p>
+</blockquote>
+<p>Hand the laptop or phone to Fernando if he wants it.</p>
+<h2>1. Order arrives (20 seconds)</h2>
+<p>Click <strong>Maria Delgado, MRI lumbar spine</strong>. The HL7 message appears below.</p>
+<blockquote>
+<p>"This is literally what the RIS sends when a doctor orders a study. Nobody reads this today; a person re-types it into a payer portal. The agent reads it."</p>
+</blockquote>
+<p>Click <strong>Next: does this need prior auth?</strong></p>
+<h2>2. Is prior auth required? (15 seconds)</h2>
+<blockquote>
+<p>"It knows the payer and the CPT code, so it knows the answer in under a second. For traditional Medicare it would say no and release the order to scheduling."</p>
+</blockquote>
+<p>Click <strong>Next: assemble the packet.</strong></p>
+<h2>3. Assemble packet (25 seconds)</h2>
+<p>Point at the checklist on the right.</p>
+<blockquote>
+<p>"This is the part that eats your staff's day: chasing the referral, the notes, proof of six weeks of therapy. The agent pulls it together and flags what is missing before anyone calls the payer."</p>
+</blockquote>
+<p>Point at the purple <strong>Human approves</strong> box.</p>
+<blockquote>
+<p>"Nothing leaves the building without a person approving it. Your coordinator stays in charge; she just stops doing the typing."</p>
+</blockquote>
+<p>Click <strong>Approve packet and submit.</strong></p>
+<h2>4. Submit to payer (30 seconds)</h2>
+<p>Watch the log fill in. Wait for the line <strong>"Payer sandbox accepted the request (HTTP 201). Tracking number …"</strong></p>
+<blockquote>
+<p>"That just went over the wire to HL7's prior-authorization test server, in the FHIR format CMS is requiring every Medicare Advantage and exchange plan to support by January 2027. That tracking number is real; the link opens the stored record on their server."</p>
+</blockquote>
+<p>If Jesse wants proof, click <strong>Show the FHIR request we sent</strong> or the <strong>Open the stored response</strong> link. If the banner was orange, say instead: "Tonight the public test server is down, so this one went to our simulated payer, which is why it is labeled that way. The code path is the same."</p>
+<p>Be straight about the boundary, because Fernando will ask: "The test server accepts and stores the request but has no medical-necessity rules for imaging, so the approve or deny you are about to see is simulated. Real payer decisions come when a real payer connects, which is the point of the 2027 rule."</p>
+<p>Click <strong>Next: track the clock.</strong></p>
+<h2>5. Track the clock (30 seconds)</h2>
+<blockquote>
+<p>"Standard requests get a 7-day clock, expedited get 72 hours. Those are the CMS deadlines payers have to meet starting this year. The agent watches every one and escalates at 75 percent."</p>
+</blockquote>
+<p>Click <strong>Advance 3 days</strong> at the top. Maria flips to <strong>Approved</strong> with an auth number.</p>
+<blockquote>
+<p>"Approved in two days. The order goes straight to scheduling."</p>
+</blockquote>
+<p>Now go back to step 1, click <strong>Robert Chen, MRI brain</strong>, and run steps 2 to 4 quickly (about 20 seconds, no narration beyond "same thing"). Note the orange flag on the packet checklist: red-flag features not documented. Say: "The agent already warned us this one might get denied."</p>
+<p>Return to the queue. Click <strong>Advance 3 days</strong> twice. Robert flips to <strong>Appeal needs signature</strong>.</p>
+<h2>6. Appeal a denial (30 seconds)</h2>
+<p>Click <strong>Review appeal</strong>.</p>
+<blockquote>
+<p>"Denied for insufficient documentation. Within a minute the agent has drafted the appeal: the denial reason, the patient's history, and the ACR Appropriateness Criteria citation that says a new headache after 50 is itself a red flag. Dr. Ortega reads it, edits it if he wants, and signs. The doctor owns the clinical argument; the agent owns the paperwork."</p>
+</blockquote>
+<p>Click <strong>Sign and submit</strong>, then <strong>Advance 3 days</strong>. Robert flips to <strong>Overturned, approved</strong>.</p>
+<h2>7. Monday report (20 seconds)</h2>
+<p>Click <strong>Owner's Monday report.</strong></p>
+<blockquote>
+<p>"Luis, this is your view. Turnaround, denial rate, appeal rate, overturn rate, and which payer is slow. One tile, Monday morning. In production you can ask it questions in plain English: which payer denies us most."</p>
+</blockquote>
+<p>Say plainly: "These numbers are synthetic placeholders. Yours will come from your own volume."</p>
+<div class="pb"></div><h2>Questions you will get</h2>
+<ul>
+<li><strong>"Is any of this connected to a real insurance company?"</strong> No. It talks to HL7's public test server for the prior-auth standard. Connecting to Blue Cross or UHC means credentialing with each payer, which is build work (milestone B2 onward) once the center has payer contracts.</li>
+<li><strong>"What about the clearinghouse / Availity?"</strong> Same code path; the agent can submit through a clearinghouse where a payer is not yet on FHIR. Fax-and-portal payers get a human-assisted path with the agent preparing the packet.</li>
+<li><strong>"Exa says they are building this."</strong> Good, use it if it ships and it is good. The agent sits above the PACS and RIS, so it works with Exa, Sectra, or whatever the center buys, and it covers the owner's reporting and the appeal drafting, which a PACS vendor will not.</li>
+<li><strong>"Can it get this wrong?"</strong> Yes, which is why the two purple gates exist. It never submits or signs on its own.</li>
+<li><strong>"How long did this take to build?"</strong> The prototype took an evening against a public test server. Production is the work on the build page: your RIS, your real payers, security and the BAAs, and your staff testing it before you open.</li>
+</ul>
+<h2>If the Wi-Fi dies</h2>
+<p>The page is static and loads from a cache once opened; the only thing that needs the network is step 4. Open it on the phone over cellular before you sit down.</p>
+<footer><div><b>Richard Finlay</b>, RGF Global Ventures LLC</div><div>https://rfinlay.github.io/imaging-priorauth-demo/</div></footer>
+</div></body></html>
